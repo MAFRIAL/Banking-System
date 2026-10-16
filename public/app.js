@@ -138,10 +138,10 @@ async function submitOperation(event) {
       const account = await api("/api/accounts", { method: "POST", body: JSON.stringify({ name, openingBalance: amount }) });
       closeModal();
       await refreshData();
-      notify(`Account #${account.accountNumber} created successfully.`);
+      notify(`Account created successfully! Your 5-digit account number is ${account.accountNumber}. Save this number; you will need it for deposits and withdrawals.`);
     } else {
       const accountNumber = Number($("account-number").value);
-      if (!Number.isInteger(accountNumber) || accountNumber <= 0) throw new Error("Enter a valid account number.");
+      if (!Number.isInteger(accountNumber) || accountNumber < 10000 || accountNumber > 99999) throw new Error("Enter the customer's 5-digit account number.");
       if (!Number.isFinite(amount) || amount <= 0) throw new Error("Amount must be greater than zero.");
       const endpoint = currentOperation === "deposit" ? "/api/deposit" : "/api/withdraw";
       const result = await api(endpoint, { method: "POST", body: JSON.stringify({ accountNumber, amount }) });
