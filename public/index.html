@@ -86,7 +86,7 @@
       <div class="modal-head"><div><p class="eyebrow">BANKING OPERATIONS</p><h2 id="modal-title">Create account</h2><p id="modal-description">Add a new customer to your banking workspace.</p></div><button class="close-btn" id="close-modal" aria-label="Close">×</button></div>
       <form id="operation-form">
         <div id="name-field" class="field"><label for="customer-name">Account holder name</label><input id="customer-name" maxlength="80" placeholder="e.g. Alex Morgan" autocomplete="name"></div>
-        <div id="account-field" class="field hidden"><label for="account-number">Account number</label><input id="account-number" type="number" min="1001" step="1" placeholder="Enter account number"></div>
+        <div id="account-field" class="field hidden"><label for="account-number">5-digit account number</label><input id="account-number" type="number" min="10000" max="99999" step="1" inputmode="numeric" placeholder="e.g. 10001" required></div>
         <div class="field"><label for="amount" id="amount-label">Opening balance</label><div class="amount-input"><span>$</span><input id="amount" type="number" min="0" step="0.01" placeholder="0.00" required></div><small id="amount-help">Enter 0 or a positive opening balance.</small></div>
         <div class="modal-actions"><button type="button" class="secondary-btn" id="cancel-modal">Cancel</button><button type="submit" class="primary-btn" id="submit-operation">Create account</button></div>
       </form>
