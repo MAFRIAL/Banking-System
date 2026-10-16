@@ -48,12 +48,17 @@ json transactions() {
 }
 
 int nextAccountNumber(const json& list) {
-    int highest = 1000;
-    for (const auto& account : list) {
-        if (account.contains("accountNumber") && account["accountNumber"].is_number_integer())
-            highest = max(highest, account["accountNumber"].get<int>());
+    // Generate a unique five-digit account number in the range 10000-99999.
+    // Start at 10000 and find the first unused number, including when older
+    // records have four-digit account numbers from a previous version.
+    for (int candidate = 10000; candidate <= 99999; ++candidate) {
+        if (find_if(list.begin(), list.end(), [candidate](const json& account) {
+                return account.value("accountNumber", -1) == candidate;
+            }) == list.end()) {
+            return candidate;
+        }
     }
-    return highest + 1;
+    return -1; // All five-digit account numbers are in use.
 }
 
 int findAccountIndex(const json& list, int number) {
@@ -122,6 +127,9 @@ int main() {
         lock_guard<mutex> lock(dataMutex);
         json list = accounts();
         int number = nextAccountNumber(list);
+        if (number < 0) {
+            sendError(res, 503, "No five-digit account numbers are available."); return;
+        }
         json account = {
             {"accountNumber", number},
             {"name", name},
